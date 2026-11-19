@@ -3,12 +3,12 @@ import Form from '@/app/ui/invoices/edit-form';
 import Breadcrumbs from '@/app/ui/invoices/breadcrumbs';
 import { fetchCustomers } from '@/app/lib/data';
  import { fetchInvoiceById } from '@/app/lib/data';
-
+import { notFound } from 'next/navigation';
 export default async function Page(props:{params:Promise<{id:string}>,searchParams?:Promise<{page?: string}>}) {
     const params=await props.params;
     const searchParams=await props.searchParams
     const currentPage= Number(searchParams?.page)
-    console.log(currentPage);
+    // console.log(currentPage);
     
     const id = params.id;
     // const page=searchParams.page
@@ -17,7 +17,9 @@ export default async function Page(props:{params:Promise<{id:string}>,searchPara
         fetchInvoiceById(id),
         fetchCustomers()
     ])
-
+   if(!invoice){
+    notFound();
+   }
   return (
     <main>
       <Breadcrumbs

@@ -50,16 +50,12 @@ export async function updateInvoice(id: string, formData: FormData) {
  
   const amountInCents = amount * 100;
  
-  try{
   await sql`
     UPDATE invoices
     SET customer_id = ${customerId}, amount = ${amountInCents}, status = ${status}
     WHERE id = ${id}
   `;
-  }
-  catch(err){
-      redirect(`/dashboard/error/`);
-    }
+    //   redirect(`/dashboard/error/`);
     //  const currentPage=Number(formData.get('currentPage'))||1
     
     revalidatePath('/dashboard/invoices/');
@@ -68,18 +64,12 @@ export async function updateInvoice(id: string, formData: FormData) {
 
 // Deleting the invoices
 export async function deleteInvoice(id: string) {
-    console.log('There is some error');
+    // console.log(id);
     
-    // throw new Error('Cannot delete the invoice')
-    
-    try{
-        await sql`DELETE FROM invoices WHERE id = ${id}`;
-        revalidatePath('/dashboard/invoices');
-        redirect(`/dashboard/invoices/`);
-
-  }
-catch(error){
-    revalidatePath('/dashboard/error')
-}
+    throw new Error('Cannot delete the invoice')
+ await sql`DELETE FROM invoices WHERE id = ${id} RETURNING id`;
+    revalidatePath('/dashboard/invoices');
+    // console.log('Delete records',result)
+    // redirect(`/dashboard/invoices/`);
 }
 
